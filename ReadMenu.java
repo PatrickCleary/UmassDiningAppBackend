@@ -41,9 +41,9 @@ public class ReadMenu {
 		   
 		// get menu from each hall.
 		   int additions = 0;
-		 //  additions += getMenuItems("https://umassdining.com/locations-menus/", "Berkshire", conn, date, DOW);
-		//   additions += getMenuItems("https://umassdining.com/locations-menus/", "Franklin", conn, date, DOW);
-		//   additions += getMenuItems("https://umassdining.com/locations-menus/", "Worcester", conn, date, DOW);
+		   additions += getMenuItems("https://umassdining.com/locations-menus/", "Berkshire", conn, date, DOW);
+		   additions += getMenuItems("https://umassdining.com/locations-menus/", "Franklin", conn, date, DOW);
+		   additions += getMenuItems("https://umassdining.com/locations-menus/", "Worcester", conn, date, DOW);
 		   additions += getMenuItems("https://umassdining.com/locations-menus/", "Hampshire", conn, date, DOW);
 		System.out.println("Complete. added: " + additions);
 		Send.send("added " + additions + " entries to database: todaysMenu" + date, "berkalertsumass", "Samp7@88", "6178660768@vtext.com");
