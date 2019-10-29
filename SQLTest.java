@@ -72,7 +72,7 @@ try {
 	public static void insertFoodFull(Connection conn, String food, String servSize, Integer[] allergyBool, Integer[] dietBool, double[] nutInfo) {
 		try {
 			PreparedStatement st = conn.prepareStatement("INSERT nutritionInfo VALUES("  + 
-		food  + ", " + 
+		food  + ", " +
 		allergyBool[0] + ", " +
 		allergyBool[1] + ", " +
 		allergyBool[2] + ", " + 
@@ -138,27 +138,48 @@ try {
 	}
 	
 	
-	public static boolean insertFood(Connection conn, String food, String hall, String meal, String category, String date, int DOW) {
-		
-		if(meal == "Lunch" && (DOW == 7 || DOW == 6)) {
-
-			meal = "Brunch";
-		}
-		
+	public static boolean insertFood(Connection conn, String food, String category, String options, String date, int DOW) {
+	
 		try {
-			PreparedStatement st = conn.prepareStatement(
-					"INSERT todaysMenu"+ date+ " (food, hall, meal, category) VALUES("  + 
+		      Statement stmt = conn.createStatement();
+		      ResultSet rs = stmt.executeQuery("SELECT * FROM todaysMenu" + date + "tester WHERE food = " + food +" AND " + "category = "+ "'" + category + "'");
+			
+			if(rs.next() != true) {
+				
+			PreparedStatement insert = conn.prepareStatement(
+					"INSERT todaysMenu"+ date+ "tester (food, category) VALUES("  + 
 					food  + ", " + "'" +  
-					hall + "'" + ", "  +  "'" + 
-					meal + "'"  + ", " + "'" +
 					category + "'" +  ")"
 					);
-			st.executeUpdate();
+			System.out.println(insert);
+			insert.executeUpdate();
+			
+			PreparedStatement update = conn.prepareStatement(
+					"UPDATE todaysMenu" + date + "tester SET "+options+"=1 WHERE food = " + food +" AND " + "category = "+ "'" + category + "'");
+					
+			System.out.println(update);
+			update.executeUpdate();
+			
 			System.out.println("Added: " + food + "to todays menu.");
+			
 			return true;
+			
+			}
+			else {
+				
+				PreparedStatement update = conn.prepareStatement(
+						"UPDATE todaysMenu" + date + "tester SET "+options+"=1 WHERE food = " + food +"AND " + "category = "+ "'" + category + "'");
+						
+				update.executeUpdate();
+				
+				return true;
+			
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-		
+			
+			
+			
 			System.out.println(e.getMessage());
 			return false;
 		}

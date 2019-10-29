@@ -41,9 +41,9 @@ public class ReadMenu {
 		   
 		// get menu from each hall.
 		   int additions = 0;
-		 //  additions += getMenuItems("https://umassdining.com/locations-menus/", "Berkshire", conn, date, DOW);
-		//   additions += getMenuItems("https://umassdining.com/locations-menus/", "Franklin", conn, date, DOW);
-		//   additions += getMenuItems("https://umassdining.com/locations-menus/", "Worcester", conn, date, DOW);
+		   additions += getMenuItems("https://umassdining.com/locations-menus/", "Berkshire", conn, date, DOW);
+		   additions += getMenuItems("https://umassdining.com/locations-menus/", "Franklin", conn, date, DOW);
+		   additions += getMenuItems("https://umassdining.com/locations-menus/", "Worcester", conn, date, DOW);
 		   additions += getMenuItems("https://umassdining.com/locations-menus/", "Hampshire", conn, date, DOW);
 		System.out.println("Complete. added: " + additions);
 		Send.send("added " + additions + " entries to database: todaysMenu" + date, "berkalertsumass", "Samp7@88", "6178660768@vtext.com");
@@ -85,12 +85,12 @@ public class ReadMenu {
 					calBerk.add(Calendar.DATE, 1);
 					newDate = calBerk.getTime();
 					SQLTest.insertLN(conn, "'" + lines[x] + "'", "'" + hall + "'", "'" + ft.format(newDate) + "'");
-					SQLTest.insertFood(conn, "'" + lines[x] + "'", "'berkshire'", "'Late Night'", "'Special'", date, DOW);
+				//	SQLTest.insertFood(conn, "'" + lines[x] + "'", "'berkshire'", "'Late Night'", "'Special'", date, DOW);
 				} else if (hall.equals("worcester")) {
 					calWos.add(Calendar.DATE, 1);
 					newDate = calWos.getTime();
 					SQLTest.insertLN(conn, "'" + lines[x] + "'", "'" + hall + "'", "'" + ft.format(newDate) + "'");
-					SQLTest.insertFood(conn, "'" + lines[x] + "'", "'worcester'", "'Late Night'", "'Special'", date, DOW);
+				//	SQLTest.insertFood(conn, "'" + lines[x] + "'", "'worcester'", "'Late Night'", "'Special'", date, DOW);
 
 				}
 
@@ -122,28 +122,39 @@ public class ReadMenu {
 			String mealStr;
 
 			String fileName;
+			String options = hall.substring(0,1);
+			options = options.toLowerCase();
 
 			switch (mealInt) {
 
 			case (0):
 				mealStr = "breakfast_fp";
 				fileName = "Breakfast";
+				options = options + "b";
 				break;
 			case (1):
 				mealStr = "lunch_fp";
 				fileName = "Lunch";
+				options = options + "l";
+
 				break;
 			case (2):
 				mealStr = "dinner_fp";
 				fileName = "Dinner";
+				options = options + "d";
+
 				break;
 			case (3):
 				mealStr = "grabngo";
 				fileName = "Grab And Go";
+				options = options + "gg";
+
 				break;
 			case (4):
 				mealStr = "latenight_fp";
 				fileName = "Late Night";
+				options = options + "ln";
+
 				break;
 			default:
 				fileName = "";
@@ -158,7 +169,7 @@ public class ReadMenu {
 
 			// for each food
 			for (Element Food : foods) {
-				// when element is a categroy head:
+				// when element is a category head:
 				if (Food.className().equals("menu_category_name"))
 					categoryName = Food.text().replace("'", "\\'");
 
@@ -175,7 +186,7 @@ public class ReadMenu {
 					double[] nutritionInfoBool = parseNutritionInfo(Food, nutritionInfoArr);
 
 					// insert menu and nutrition info.
-					if(SQLTest.insertFood(conn, foodText, hall, fileName, categoryName, date, DOW)) numAdditions++;
+					if(SQLTest.insertFood(conn, foodText, categoryName, options, date, DOW)) numAdditions++;
 					SQLTest.insertFoodFull(conn, foodText, servSize, AllergyBool, dietBool, nutritionInfoBool);
 
 				}
